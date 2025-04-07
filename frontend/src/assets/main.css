@@ -1,0 +1,20 @@
+@import './base.css';
+
+#app {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+
+  max-width: 1080px;
+  max-height: 720px;
+  margin: auto;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+
+  display: flex;
+  place-items: center;
+}
