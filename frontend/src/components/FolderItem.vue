@@ -39,8 +39,15 @@ const hasChildren = computed(() => props.folder.children && props.folder.childre
     </div>
 
     <template v-if="isExpanded && folder.children">
-      <FolderItem v-for="child in folder.children" :key="child.id" :folder="child" :level="level + 1"
-        :expanded-folders="expandedFolders" @select="emit('select', $event)" @toggle="emit('toggle', $event)" />
+      <FolderItem
+        v-for="child in folder.children"
+        :key="child.id"
+        :folder="child"
+        :level="level + 1"
+        :expanded-folders="expandedFolders"
+        @select="emit('select', $event)"
+        @toggle="emit('toggle', $event)"
+      />
     </template>
   </div>
 </template>

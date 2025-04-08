@@ -37,18 +37,36 @@ const handleSubmit = async () => {
         <form @submit.prevent="handleSubmit">
           <div class="form-group">
             <label for="email">Email:</label>
-            <input id="email" v-model="email" type="email" required placeholder="Enter your email" autofocus
-              :disabled="store.isLoading" />
+            <input
+              id="email"
+              v-model="email"
+              type="email"
+              required
+              placeholder="Enter your email"
+              autofocus
+              :disabled="store.isLoading"
+            />
           </div>
           <div class="form-group">
             <label for="password">Password:</label>
-            <input id="password" v-model="password" type="password" required placeholder="Enter your password"
-              :disabled="store.isLoading" />
+            <input
+              id="password"
+              v-model="password"
+              type="password"
+              required
+              placeholder="Enter your password"
+              :disabled="store.isLoading"
+            />
           </div>
           <p v-if="store.error" class="error-message">{{ store.error }}</p>
           <p v-if="store.isLoading" class="loading-message">Logging in...</p>
           <div class="modal-footer">
-            <button type="button" class="btn-secondary" :disabled="store.isLoading" @click="emit('close')">
+            <button
+              type="button"
+              class="btn-secondary"
+              :disabled="store.isLoading"
+              @click="emit('close')"
+            >
               Cancel
             </button>
             <button type="submit" class="btn-primary" :disabled="store.isLoading">

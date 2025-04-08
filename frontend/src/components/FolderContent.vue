@@ -40,7 +40,11 @@ const handleDeleteConfirm = () => {
     <div class="folder-header">
       <h2 class="folder-title">{{ currentFolder?.name || 'Root' }}</h2>
       <div class="header-actions">
-        <button v-if="currentFolder && currentFolder.id !== 'root'" class="delete-btn" @click="showDeleteModal = true">
+        <button
+          v-if="currentFolder && currentFolder.id !== 'root'"
+          class="delete-btn"
+          @click="showDeleteModal = true"
+        >
           <i class="folder-icon">🗑️</i> Delete Folder
         </button>
         <button class="new-folder-btn" @click="showNewFolderModal = true">
@@ -48,12 +52,25 @@ const handleDeleteConfirm = () => {
         </button>
       </div>
     </div>
-    <NewFolderModal v-if="showNewFolderModal" @create="handleCreateFolder" @close="showNewFolderModal = false" />
-    <ConfirmationModal v-if="showDeleteModal" title="Delete Folder"
+    <NewFolderModal
+      v-if="showNewFolderModal"
+      @create="handleCreateFolder"
+      @close="showNewFolderModal = false"
+    />
+    <ConfirmationModal
+      v-if="showDeleteModal"
+      title="Delete Folder"
       :message="`Are you sure you want to delete '${currentFolder?.name}'? This action cannot be undone.`"
-      @confirm="handleDeleteConfirm" @cancel="showDeleteModal = false" />
+      @confirm="handleDeleteConfirm"
+      @cancel="showDeleteModal = false"
+    />
     <div class="content-list">
-      <div v-for="item in contents" :key="item.id" class="content-item" @click="store.selectFolder(item)">
+      <div
+        v-for="item in contents"
+        :key="item.id"
+        class="content-item"
+        @click="store.selectFolder(item)"
+      >
         <span class="item-name">
           <i class="folder-icon">📁</i>
           {{ item.name }}

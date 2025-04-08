@@ -1,3 +1,4 @@
+import axios from 'axios'
 import api from '../utils/axios'
 
 interface Folder {
@@ -12,8 +13,8 @@ class FolderService {
     try {
       const response = await api.get<Folder[]>(`/folders/search?q=${encodeURIComponent(query)}`)
       return response.data
-    } catch (error: any) {
-      if (error?.response?.data?.message) {
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error) && error.response?.data?.message) {
         throw new Error(error.response.data.message)
       }
       throw new Error('Failed to search folders')
@@ -24,8 +25,8 @@ class FolderService {
     try {
       const response = await api.get<Folder[]>('/folders')
       return response.data
-    } catch (error: any) {
-      if (error?.response?.data?.message) {
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error) && error.response?.data?.message) {
         throw new Error(error.response.data.message)
       }
       throw new Error('Failed to fetch folders')
@@ -36,11 +37,11 @@ class FolderService {
     try {
       const response = await api.post<Folder>('/folders', {
         name,
-        parentId
+        parentId,
       })
       return response.data
-    } catch (error: any) {
-      if (error?.response?.data?.message) {
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error) && error.response?.data?.message) {
         throw new Error(error.response.data.message)
       }
       throw new Error('Failed to create folder')
@@ -50,8 +51,8 @@ class FolderService {
   async deleteFolder(id: string): Promise<void> {
     try {
       await api.delete(`/folders/${id}`)
-    } catch (error: any) {
-      if (error?.response?.data?.message) {
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error) && error.response?.data?.message) {
         throw new Error(error.response.data.message)
       }
       throw new Error('Failed to delete folder')
@@ -62,8 +63,8 @@ class FolderService {
     try {
       const response = await api.get<Folder[]>(`/folders/${id}/children`)
       return response.data
-    } catch (error: any) {
-      if (error?.response?.data?.message) {
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error) && error.response?.data?.message) {
         throw new Error(error.response.data.message)
       }
       throw new Error('Failed to fetch subfolders')

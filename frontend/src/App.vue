@@ -3,22 +3,26 @@ import { computed, watch } from 'vue'
 import { useFolderStore } from './stores/folder'
 import { useUserStore } from './stores/user'
 import HeaderUser from './components/HeaderUser.vue'
-import Sidebar from './components/Sidebar.vue'
+import LeftSidebar from './components/LeftSidebar.vue'
 import FolderContent from './components/FolderContent.vue'
 
 const store = useFolderStore()
 const userStore = useUserStore()
 
 // Watch authentication state to fetch folders
-watch(() => userStore.isAuthenticated, async (isAuthenticated) => {
-  if (isAuthenticated) {
-    await store.fetchFolders()
-  } else {
-    // Clear folders when logged out
-    store.folders = []
-    store.currentFolder = undefined
-  }
-}, { immediate: true })
+watch(
+  () => userStore.isAuthenticated,
+  async (isAuthenticated) => {
+    if (isAuthenticated) {
+      await store.fetchFolders()
+    } else {
+      // Clear folders when logged out
+      store.folders = []
+      store.currentFolder = undefined
+    }
+  },
+  { immediate: true },
+)
 
 const currentContents = computed(() => store.currentFolder?.children || [])
 </script>
@@ -30,9 +34,13 @@ const currentContents = computed(() => store.currentFolder?.children || [])
       <template v-if="store.isLoading">
         <div class="loading-overlay">Loading folders...</div>
       </template>
-      <Sidebar :folders="store.folders" @select-folder="store.selectFolder" />
-      <FolderContent :current-folder="store.currentFolder" :contents="currentContents"
-        @create-folder="store.createFolder" @delete-folder="store.deleteFolder" />
+      <LeftSidebar :folders="store.folders" @select-folder="store.selectFolder" />
+      <FolderContent
+        :current-folder="store.currentFolder"
+        :contents="currentContents"
+        @create-folder="store.createFolder"
+        @delete-folder="store.deleteFolder"
+      />
     </div>
   </div>
 </template>

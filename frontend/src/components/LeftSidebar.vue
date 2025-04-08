@@ -3,13 +3,18 @@ import { ref, watch } from 'vue'
 import FolderItem from './FolderItem.vue'
 import { useFolderStore } from '../stores/folder'
 
-// Simple debounce function
-function debounce<T extends (...args: any[]) => any>(fn: T, delay: number) {
-  let timeoutId: ReturnType<typeof setTimeout>
-  return function (...args: Parameters<T>) {
-    clearTimeout(timeoutId)
-    timeoutId = setTimeout(() => fn(...args), delay)
+const debounce = <F extends (...args: Parameters<F>) => ReturnType<F>>(
+  func: F,
+  waitFor: number,
+) => {
+  let timeout: NodeJS.Timeout
+
+  const debounced = (...args: Parameters<F>) => {
+    clearTimeout(timeout)
+    timeout = setTimeout(() => func(...args), waitFor)
   }
+
+  return debounced
 }
 
 interface Folder {
@@ -44,7 +49,7 @@ watch(searchQuery, (newQuery) => {
 <template>
   <aside class="sidebar">
     <div class="search-box">
-      <input v-model="searchQuery" type="text" placeholder="Search folders..." :disabled="store.isLoading">
+      <input v-model="searchQuery" type="text" placeholder="Search folders..." :disabled="store.isLoading" />
       <div v-if="store.isSearching" class="search-loading">Searching...</div>
     </div>
 
@@ -60,9 +65,7 @@ watch(searchQuery, (newQuery) => {
 
     <div class="folder-container" v-else-if="!store.searchQuery">
       <div class="folder-item">
-        <span class="folder-name" @click="store.selectRootFolder()">
-          # Root
-        </span>
+        <span class="folder-name" @click="store.selectRootFolder()"> # Root </span>
       </div>
 
       <FolderItem v-for="folder in folders" :key="folder.id" :folder="folder" :level="0"

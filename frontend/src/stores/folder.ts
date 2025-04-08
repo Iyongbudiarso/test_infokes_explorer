@@ -156,7 +156,7 @@ export const useFolderStore = defineStore('folder', () => {
           if (!folder.children) {
             folder.children = []
           }
-          if (folder.children.findIndex(v => v.id === newFolder.id) === -1) {
+          if (folder.children.findIndex((v) => v.id === newFolder.id) === -1) {
             folder.children.push(newFolder)
           }
         }
@@ -179,7 +179,7 @@ export const useFolderStore = defineStore('folder', () => {
 
       // Update local state after successful API call
       const removeFromParent = (parentFolders: Folder[], id: string): boolean => {
-        const index = parentFolders.findIndex(f => f.id === id)
+        const index = parentFolders.findIndex((f) => f.id === id)
         if (index !== -1) {
           parentFolders.splice(index, 1)
           return true
@@ -196,7 +196,7 @@ export const useFolderStore = defineStore('folder', () => {
       const findParentFolder = (parentFolders: Folder[], id: string): Folder | null => {
         for (const folder of parentFolders) {
           if (folder.children) {
-            if (folder.children.some(child => child.id === id)) {
+            if (folder.children.some((child) => child.id === id)) {
               return folder
             }
             const found = findParentFolder(folder.children, id)

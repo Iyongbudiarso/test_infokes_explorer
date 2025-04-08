@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { authService } from '../services/auth.service'
 
 interface User {
@@ -9,15 +9,16 @@ interface User {
 
 export const useUserStore = defineStore('user', () => {
   const user = ref<User | null>(null)
-  const isAuthenticated = ref(false)
   const isLoading = ref(false)
   const error = ref<string | null>(null)
+
+  // getters isAuthenticated
+  const isAuthenticated = computed(() => !!user.value)
 
   // Load user from localStorage on init
   const storedUser = localStorage.getItem('user')
   if (storedUser) {
     user.value = JSON.parse(storedUser)
-    isAuthenticated.value = true
   }
 
   async function login(email: string, password: string) {
@@ -27,10 +28,9 @@ export const useUserStore = defineStore('user', () => {
       const response = await authService.login({ email, password })
       const dataUser = {
         email: response.user.email,
-        token: response.token
+        token: response.token,
       }
       user.value = dataUser
-      isAuthenticated.value = true
       localStorage.setItem('user', JSON.stringify(dataUser))
     } catch (err) {
       error.value = err instanceof Error ? err.message : 'Login failed'
@@ -42,7 +42,6 @@ export const useUserStore = defineStore('user', () => {
 
   function logout() {
     user.value = null
-    isAuthenticated.value = false
     localStorage.removeItem('user')
   }
 
@@ -52,6 +51,6 @@ export const useUserStore = defineStore('user', () => {
     isLoading,
     error,
     login,
-    logout
+    logout,
   }
 })

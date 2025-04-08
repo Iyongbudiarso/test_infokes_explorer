@@ -1,3 +1,4 @@
+import axios from 'axios'
 import api from '../utils/axios'
 
 interface LoginResponse {
@@ -19,8 +20,8 @@ class AuthService {
     try {
       const response = await api.post<LoginResponse>('/users/login', credentials)
       return response.data
-    } catch (error: any) {
-      if (error?.response?.data?.message) {
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error) && error.response?.data?.message) {
         throw new Error(error.response.data.message)
       }
       throw new Error('Login failed. Please try again.')
